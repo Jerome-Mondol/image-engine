@@ -9,6 +9,7 @@ interface AppConfig {
         accessKeyId: string;
         secretAccessKey: string;
         bucketName: string;
+        publicImages: string;
     };
 }
 
@@ -21,6 +22,7 @@ const requiredEnv = [
     'ACCESS_KEY_ID',
     'SECRET_ACCESS_KEY',
     'IMAGE_BUCKET_NAME',
+    'PUBLIC_IMAGES',
 ]
 
 // required env check
@@ -36,7 +38,8 @@ export const config: AppConfig = {
         accountId: process.env.ACCOUNT_ID!,
         accessKeyId: process.env.ACCESS_KEY_ID!,
         secretAccessKey: process.env.SECRET_ACCESS_KEY!,
-        bucketName: process.env.IMAGE_BUCKET_NAME!
+        bucketName: process.env.IMAGE_BUCKET_NAME!,
+        publicImages: process.env.PUBLIC_IMAGES!,
     },
 }
 

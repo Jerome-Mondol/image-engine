@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: Image Engine API
+  version: 1.0.0
+  description: Image Engine.
+servers:
+  - url: http://localhost:5000/api/v1/images
+tags:
+  - name: images
+    description: Image upload routes
+paths:
+  /:
+    get:
+      tags:
+        - images
+      summary: Health check for the image routes
+      responses:
+        "200":
+          description: Image routes are ready
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicSuccessResponse"
+              example:
+                success: true
+                message: Image routes are ready.
+  /upload:
+    post:
+      tags:
+        - images
+      summary: Upload one or more images to R2
+      description: Uploads image files using multipart/form-data. The images field accepts one or more files.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - images
+              properties:
+                destination:
+                  type: string
+                  description: Optional folder name inside the bucket.
+                  example: images
+                images:
+                  type: array
+                  description: One or more image files.
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        "201":
+          description: Images uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadResponse"
+              example:
+                success: true
+                message: Image(s) uploaded successfully.
+                data:
+                  - key: images/1722480000000.webp
+                    url: https://example-public-images.com/images/1722480000000.webp
+        "400":
+          description: No files were provided
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                success: false
+                message: No image files provided.
+        "500":
+          description: Upload failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                success: false
+                message: Failed to upload image(s).
+                error: Unknown error
+components:
+  schemas:
+    BasicSuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+        - message
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+        error:
+          type: string
+      required:
+        - success
+        - message
+    UploadedImage:
+      type: object
+      properties:
+        key:
+          type: string
+          example: images/1722480000000.webp
+        url:
+          type: string
+          example: https://example-public-images.com/images/1722480000000.webp
+      required:
+        - key
+        - url
+    UploadResponse:
+      allOf:
+        - $ref: "#/components/schemas/BasicSuccessResponse"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/UploadedImage"
+          required:
+            - data
