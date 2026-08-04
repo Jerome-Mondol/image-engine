@@ -11,6 +11,7 @@ interface AppConfig {
         bucketName: string;
         publicImages: string;
     };
+    redisUrl: string;
 }
 
 
@@ -23,6 +24,7 @@ const requiredEnv = [
     'SECRET_ACCESS_KEY',
     'IMAGE_BUCKET_NAME',
     'PUBLIC_IMAGES',
+    'REDIS_URL',
 ]
 
 // required env check
@@ -41,6 +43,7 @@ export const config: AppConfig = {
         bucketName: process.env.IMAGE_BUCKET_NAME!,
         publicImages: process.env.PUBLIC_IMAGES!,
     },
+    redisUrl: process.env.REDIS_URL!,
 }
 
 
