@@ -18,7 +18,7 @@
   "description": "",
   "main": "compress.js",
   "scripts": {
-    "dev": "node api.js && tsx watch server.ts"
+    "dev": "tsx watch server.ts"
   },
   "keywords": [],
   "author": "",
